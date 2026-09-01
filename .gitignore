@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Env
+.env
+*.env.local
+
+# Data (large binaries)
+backend/data/mediassist_data/
+
+# Qdrant
+qdrant_storage/
+
+# Node
+node_modules/
+.next/
