@@ -35,6 +35,15 @@ def collections_for_role(role: Role) -> list[Collection]:
     return ROLE_COLLECTIONS[role]
 
 
+def roles_for_collection(collection: Collection) -> list[str]:
+    """Return role names that may access the given collection (for chunk metadata)."""
+    return [
+        role.value
+        for role, collections in ROLE_COLLECTIONS.items()
+        if collection in collections
+    ]
+
+
 def can_use_sql_rag(role: Role) -> bool:
     """Only admins may query the operational SQLite database."""
     return role == Role.ADMIN
