@@ -1,0 +1,69 @@
+
+================================================================================
+  SQL RAG SMOKE TESTS
+================================================================================
+Database: /Users/jaiprakash/projects/MediBot/medibot/backend/data/mediassist_data/db/mediassist.db
+Running 6 analytical questions.
+
+
+─── Test 1 ───
+Q: How many claims are currently pending?
+Verifier expected row count: 1
+Generated SQL: SELECT COUNT(*) FROM claims WHERE status = 'pending';
+Pipeline row count: 1
+Answer: There are currently 17 pending claims.
+✓ PASS
+
+─── Test 2 ───
+Q: What is the total claimed amount for cardiology?
+Verifier expected row count: 1
+Generated SQL: SELECT SUM(claimed_amount) AS total_claimed_amount FROM claims WHERE department = 'cardiology';
+Pipeline row count: 1
+Answer: The total claimed amount for cardiology is **2,202,100**.
+✓ PASS
+
+─── Test 3 ───
+Q: How many maintenance tickets are still open or in progress?
+Verifier expected row count: 1
+Generated SQL: SELECT COUNT(*) FROM maintenance_tickets WHERE status IN ('open', 'in_progress');
+Pipeline row count: 1
+Answer: There are **26** maintenance tickets that are still open or in progress.
+✓ PASS
+
+─── Test 4 ───
+Q: Which equipment category has the most maintenance tickets?
+Verifier expected row count: 6
+Generated SQL: SELECT category FROM maintenance_tickets GROUP BY category ORDER BY COUNT(*) DESC LIMIT 1;
+Pipeline row count: 1
+Answer: The equipment category with the most maintenance tickets is **monitoring**.
+✗ FAIL — row count mismatch (got 1, expected 6)
+
+─── Test 5 ───
+Q: How many claims were submitted by New India Assurance?
+Verifier expected row count: 1
+Generated SQL: SELECT COUNT(*) FROM claims WHERE insurer = 'New India Assurance';
+Pipeline row count: 1
+Answer: 12 claims were submitted by New India Assurance.
+✓ PASS
+
+─── Test 6 ───
+Q: List the last 5 escalated claims with their claimed amounts.
+Verifier expected row count: 5
+Generated SQL: SELECT claim_id, claimed_amount FROM claims WHERE status = 'escalated' ORDER BY submitted_date DESC LIMIT 5;
+Pipeline row count: 5
+Answer: The five most recent escalated claims are:
+
+- CLM‑2024‑1071 – $177,700  
+- CLM‑2024‑1010 – $212,100  
+- CLM‑2024‑1037 – $184,200  
+- CLM‑2024‑1067 – $172,200  
+- CLM‑2024‑1049 – $188,400.
+✓ PASS
+
+================================================================================
+  SUMMARY
+================================================================================
+Passed: 5 / 6
+Failed: 1 / 6
+
+🎉 Rubric requirement met (>= 4 passing analytical questions).
